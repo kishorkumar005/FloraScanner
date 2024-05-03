@@ -6,7 +6,16 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function App() {
   return (
     <Stack>
-      <Stack.Screen name='index'></Stack.Screen>
+      <Stack.Screen name='index' 
+      options={{
+        headerShown : false,
+      }}
+      ></Stack.Screen>
+      <Stack.Screen name='(auth)' 
+      options={{
+        headerShown : false,
+      }}
+      ></Stack.Screen>
       </Stack>
   );
 }
