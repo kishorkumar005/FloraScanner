@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
 
+
 export default function App() {
   return (
     <Stack>
@@ -12,6 +13,11 @@ export default function App() {
       }}
       ></Stack.Screen>
       <Stack.Screen name='(auth)' 
+      options={{
+        headerShown : false,
+      }}
+      ></Stack.Screen>
+      <Stack.Screen name='(tabs)' 
       options={{
         headerShown : false,
       }}
