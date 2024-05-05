@@ -10,6 +10,7 @@ export default function App() {
       <Stack.Screen name='index' 
       options={{
         headerShown : false,
+        
       }}
       ></Stack.Screen>
       <Stack.Screen name='(auth)' 
