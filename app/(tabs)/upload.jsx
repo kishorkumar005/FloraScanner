@@ -86,18 +86,20 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, Modal, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityIndicator } from 'react-native';
 
 const Upload = () => {
   const [image, setImage] = useState(require("../../assets/images/Image_placeholder.png"));
   const [prediction, setPrediction] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       selectionLimit: 1,
-      base64: true, // Include base64 data for sending to the API
+      base64: true, 
     });
   
     if (result.cancelled) {
@@ -105,21 +107,24 @@ const Upload = () => {
       return;
     }
   
-    const { uri, base64 } = result.assets[0]; // Extract image data
+    const { uri, base64 } = result.assets[0]; 
   
     try {
-      const response = await fetch('https://florascannerapi.onrender.com/predict', { // Replace with your API URL
+      setIsLoading(true);
+      const response = await fetch('https://florascannerapi.onrender.com/predict', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ image: base64 }), // Send base64 encoded image
+        body: JSON.stringify({ image: base64 }), 
       });
+
   
       const predictionData = await response.json();
-      console.log("Prediction:", predictionData); // Log prediction data in console
+      console.log("Prediction:", predictionData); 
       setPrediction(predictionData);
-      setModalVisible(true); // Show modal with prediction result
+      setIsLoading(false);
+      setModalVisible(true);
     } catch (error) {
       console.error('Error uploading image:', error);
     }
@@ -131,7 +136,7 @@ const Upload = () => {
       <TouchableOpacity style={styles.button} onPress={pickImage}>
         <Text style={styles.buttonText}>Upload Image</Text>
       </TouchableOpacity>
-
+      {isLoading ? <ActivityIndicator size="large"  />:<></>}
       <Modal
   animationType="slide"
   transparent={true}
@@ -143,7 +148,7 @@ const Upload = () => {
   <View style={styles.centeredView}>
     <View style={styles.modalView}>
       <Text style={styles.modalText}>Prediction Result</Text>
-      <Text style={styles.resultText}>Class: {prediction?.class}</Text>
+      <Text style={styles.resultText}>Plant Name: {prediction?.class}</Text>
       <Text style={styles.resultText}>Confidence: {prediction?.confidence}%</Text>
       <Text style={styles.modalText}>Details</Text>
       {prediction?.details && (
@@ -157,12 +162,12 @@ const Upload = () => {
         </View>
       )}
       <TouchableOpacity
-        style={{ ...styles.button, backgroundColor: '#2196F3' }}
+        style={{ ...styles.button, backgroundColor: '#41B06E' }}
         onPress={() => {
           setModalVisible(false);
         }}
       >
-        <Text style={styles.buttonText}>Close</Text>
+        <Text style={styles.buttonTextColor}>Close</Text>
       </TouchableOpacity>
     </View>
   </View>
@@ -181,7 +186,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop : 100,
+    backgroundColor : "#69f662",
   },
   container: {
     flex: 1,
@@ -190,12 +195,19 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10,
+    backgroundColor: '#3e7d17',
+    borderRadius : "0.5em",
+    border : "1px solid #7bff55",
+    padding: 15,
     marginBottom: 20,
+    
   },
   buttonText: {
     fontSize: 16,
+    color : "#ffffff"
+  },
+  buttonTextColor : {
+    color : "#ffffff",
   },
   centeredView: {
     flex: 1,

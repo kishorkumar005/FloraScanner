@@ -1,18 +1,21 @@
-import { View, Text,Image } from 'react-native'
-import React from 'react'
+import { Image } from 'react-native'
+import React, { useState } from 'react'
 import { Tabs } from 'expo-router'
 
 const TabsLayout = () => {
+  // const [colors, setColor] = useState("#66b535");
   return (
     <Tabs screenOptions={
       {
         headerShown : false,
+        headerBackground : "#3e7d17"
       }
     }>
       <Tabs.Screen name='upload' 
       options={{
         title : "Upload",
-        tabBarIcon : ({color,focused}) => {
+        tabBarIcon : ({color,  focused}) => {
+          console.log("Color : ",color);
           return(
             <Image 
             source = {require("../../assets/icons/upload_icon.png")}
@@ -46,8 +49,6 @@ const TabsLayout = () => {
         }
       }}
       />
-
-
     </Tabs>
   )
 }

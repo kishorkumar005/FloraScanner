@@ -2,7 +2,7 @@
   "expo": {
     "name": "FloraFinder",
     "slug": "FloraFinder",
-    "scheme" : "Flora",
+    "scheme": ["Flora"], 
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,15 +22,26 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.babu2.FloraFinder"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-router",
-      "expo-image-picker",
-      
-    ]
+      "expo-image-picker"
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "200effbe-061a-4ffe-a9e9-dc1b067f107f"
+      }
+    }
   }
 }

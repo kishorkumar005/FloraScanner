@@ -1,50 +1,51 @@
-import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { Link } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import axios from 'axios'
-
-
-
+import { View, Text, StyleSheet,  ImageBackground, Image } from 'react-native';
+import { Link } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const IndexLayout = () => {
-
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    // Call fetchMessage function when the component mounts
-    fetchMessage();
-  }, []); // Empty dependency array to ensure this effect runs only once
-
-  const fetchMessage = async () => {
-    try {
-      const response = await fetch('https://florascannerapi.onrender.com');
-      const data = await response.json();
-      console.log("Response : ",response);
-      console.log("Data : ",data);
-      setMessage(data.message);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
-
+  const font = require("../assets/fonts/InknutAntiqua-ExtraBold.ttf");
   return (
-    <SafeAreaView style={
-      {
-        flex : 1,
-        justifyContent : 'center',
-        alignItems : 'center'
-      }
-    }>
-      <View>
-        <Text>{message}</Text>
-      <Link href="/upload" 
-      className='flex-1 items-center justify-center'
-      >Go to Sign UP</Link>
-    </View>
-    </SafeAreaView>
-  )
-}
+    <SafeAreaView style={styles.container}>
+      <Image source={require("../assets/images/splash.png")} resizeMode='contain' style={{
+        width : "20em",
+        height : "20em",
+      }}>
 
-export default IndexLayout
+      </Image>
+      <View style={styles.content}>
+          <Text style={styles.message} font = {font}>Welcome to Flora Scanner!</Text>
+          <Link href="/upload" style={styles.link}>
+            Click To Explore
+          </Link>
+        </View>
+      
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',     
+    backgroundColor : "#69f662",
+  },
+  backgroundimg : {
+    opacity : "10",
+  },
+  content: {
+    alignItems: 'center',
+  },
+  message: {
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  link: {
+    fontSize: 16,
+    color: '#007bff',
+    
+  },
+});
+
+export default IndexLayout;

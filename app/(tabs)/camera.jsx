@@ -58,11 +58,14 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, Modal, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ActivityIndicator } from 'react-native';
 
 const Upload = () => {
   const [image, setImage] = useState(require("../../assets/images/Image_placeholder.png"));
   const [prediction, setPrediction] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [isLoading,setIsLoading] = useState(false);
+
 
   const pickImage = async () => {
     let result = await ImagePicker.launchCameraAsync({
@@ -80,6 +83,7 @@ const Upload = () => {
     const { uri, base64 } = result.assets[0]; 
   
     try {
+      setIsLoading(true);
       const response = await fetch('https://florascannerapi.onrender.com/predict', { 
         method: 'POST',
         headers: {
@@ -95,6 +99,7 @@ const Upload = () => {
       const predictionData = await response.json();
       console.log("Prediction:", predictionData); 
       setPrediction(predictionData);
+      setIsLoading(false);
       setModalVisible(true); 
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -112,7 +117,7 @@ const Upload = () => {
       <TouchableOpacity style={styles.button} onPress={pickImage}>
         <Text style={styles.buttonText}>Capture Image</Text>
       </TouchableOpacity>
-
+      {isLoading ? <ActivityIndicator size="large"  />:<></>}
       <Modal
   animationType="slide"
   transparent={true}
@@ -123,14 +128,14 @@ const Upload = () => {
 >
   <View style={styles.centeredView}>
     <View style={styles.modalView}>
-      <Text style={styles.modalText}>Prediction Result</Text>
-      <Text style={styles.resultText}>Class: {prediction?.class}</Text>
-      <Text style={styles.resultText}>Confidence: {prediction?.confidence}%</Text>
+      <Text style={styles.modalText}><b>Prediction Result</b></Text>
+      <Text style={styles.resultText}><b>Class:</b> {prediction?.class}</Text>
+      <Text style={styles.resultText}><b>Confidence:</b> {prediction?.confidence}%</Text>
       <Text style={styles.modalText}>Details</Text>
       {prediction?.details && (
         <View>
           {Object.entries(prediction.details).map(([key, value], index) => (
-            <View key={index} style={styles.detailContainer}>
+            <View key={index}  style={styles.detailContainer}>
               <Text style={styles.detailTitle}>{key}:</Text>
               <Text style={styles.detailText}>{value}</Text>
             </View>
@@ -138,7 +143,7 @@ const Upload = () => {
         </View>
       )}
       <TouchableOpacity
-        style={{ ...styles.button, backgroundColor: '#2196F3' }}
+        style={{ ...styles.button, backgroundColor: '#41B06E' }}
         onPress={() => {
           setModalVisible(false);
         }}
@@ -163,7 +168,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop : 100,
+    backgroundColor : "#69f662",
+
   },
   container: {
     flex: 1,
@@ -172,12 +178,16 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10,
+    backgroundColor: '#3e7d17',
+    borderRadius : "0.5em",
+    border : "1px solid #7bff55",
+    padding: 15,
     marginBottom: 20,
   },
   buttonText: {
     fontSize: 16,
+    color : "#ffffff"
+
   },
   centeredView: {
     flex: 1,
